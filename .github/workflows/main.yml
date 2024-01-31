@@ -1,10 +1,11 @@
 name: CI
 
-on: [push, workflow_dispatch]
+on:
+  push:
+  workflow_dispatch:
 
 jobs:
   build:
-
     runs-on: windows-latest
 
     steps:
@@ -23,3 +24,11 @@ jobs:
     - run: Set-LocalUser -Name "runneradmin" -Password (ConvertTo-SecureString -AsPlainText "P@ssw0rd!" -Force)
     - name: Create Tunnel
       run: .\ngrok\ngrok.exe tcp 3389
+
+    # Add a sleep/delay for 24 hours before stopping the workflow
+    - name: Sleep for 24 hours
+      run: Start-Sleep -Seconds 86400  # 86400 seconds in 24 hours
+
+    # Add a step to stop the workflow after 24 hours
+    - name: Stop Workflow
+      run: exit 0
